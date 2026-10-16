@@ -23,6 +23,21 @@
     .view-toggle{display:flex;padding:4px;border:1px solid var(--line);border-radius:14px;background:white}
     .view-toggle button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:8px 12px;font-weight:750}
     .view-toggle button[aria-pressed="true"]{background:var(--ink);color:white}
+    .pathways{margin:4px 0 15px;padding:14px 15px 15px;border:1px solid var(--line);border-radius:18px;background:#fffefa}
+    .pathways-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .pathways-head strong{font-size:14px}
+    .pathways-head span{font-size:12px;color:var(--muted)}
+    .pathway-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .pathway{border:1px solid var(--line);border-radius:12px;background:#fbfcf8;color:var(--ink);padding:10px 12px;text-align:left;transition:background .15s,border-color .15s,transform .15s}
+    .pathway:hover,.pathway:focus-visible{background:#eef6e5;border-color:#a8ce8a;transform:translateY(-1px)}
+    .pathway b{display:block;font-size:13px}
+    .pathway small{display:block;margin-top:3px;color:var(--muted);font-size:11px;line-height:1.4}
+    .path-context{display:none;margin:0 0 12px;padding:12px 15px;border:1px solid #d7e6c9;border-radius:14px;background:#eff6e7}
+    .path-context.active{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .path-context strong{font-size:14px}
+    .path-context p{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .path-context button{flex:none;border:1px solid #c8d9bd;border-radius:10px;background:white;color:#355b37;padding:7px 10px;font-size:12px;font-weight:750}
+    .path-step{font-size:13px;color:var(--muted);font-weight:750;margin:0 0 10px}
     .filters{display:flex;gap:8px;overflow:auto;padding:2px 0 9px;margin-bottom:10px;scrollbar-width:thin}
     .filter{flex:none;background:transparent;border:1px solid var(--line);border-radius:99px;padding:8px 13px;color:#48625a;font-size:14px;font-weight:750}
     .filter[aria-pressed="true"]{background:var(--green);border-color:#a5d36d;color:#355b28}
@@ -67,7 +82,8 @@
     .slide-count{font-size:14px;color:var(--muted);min-width:65px;text-align:center}
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:560px){.shell{padding:14px 13px 38px}.grid{grid-template-columns:1fr}.term-card{min-height:210px}.slide{min-height:440px;border-radius:22px}.view-toggle button{padding:8px 9px;font-size:13px}}
+    @media(max-width:760px){.pathway-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:560px){.shell{padding:14px 13px 38px}.grid{grid-template-columns:1fr}.term-card{min-height:210px}.slide{min-height:440px;border-radius:22px}.view-toggle button{padding:8px 9px;font-size:13px}.pathways{padding:12px}.pathways-head{display:block}.pathways-head span{display:block;margin-top:2px}.pathway{padding:9px}.path-context.active{align-items:flex-start;flex-direction:column}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
   </style>
 </head>
@@ -82,6 +98,10 @@
           <button id="slideBtn" type="button" aria-pressed="false">🖼️ 한 장씩 보기</button>
         </div>
       </div>
+      <section class="pathways" aria-label="목적별 학습 경로">
+        <div class="pathways-head"><strong>무엇을 알고 싶으세요?</strong><span>관심 있는 일을 고르면 관련 용어를 순서대로 안내해요.</span></div>
+        <div class="pathway-list" id="pathways"></div>
+      </section>
       <nav class="filters" id="filters" aria-label="분야별 용어"></nav>
     </section>
 
@@ -91,6 +111,8 @@
     </section>
 
     <section class="slide-wrap" id="slideView" aria-label="용어 한 장씩 보기">
+      <div class="path-context" id="pathContext" aria-live="polite"></div>
+      <p class="path-step" id="pathStep" hidden></p>
       <article class="slide" id="slideCard" aria-live="polite"></article>
       <div class="slide-controls"><button type="button" id="prevSlide">← 이전</button><span class="slide-count" id="slideCount" aria-live="polite">0 / 0</span><button type="button" id="nextSlide">다음 →</button></div>
     </section>
@@ -100,10 +122,17 @@
     (() => {
       const terms = window.GLOSSARY_TERMS || [];
       const categories = ['전체', ...new Set(terms.map(term => term.category))];
+      const learningPaths = [
+        {id:'ai-basics', title:'AI는 어떻게 답하고, 왜 틀릴까요?', description:'AI 답변이 만들어지는 과정과 한계를 살펴봐요.', termIds:['t01','t04','t05','t07','t08','t09','t06']},
+        {id:'prompting', title:'AI에게 원하는 답을 부탁하려면?', description:'질문을 어떻게 쓰면 좋은지 차근차근 알아봐요.', termIds:['t10','t11','t12','t13','t14']},
+        {id:'website', title:'웹페이지는 어떻게 만들어져 인터넷에 보일까요?', description:'화면을 만들고 웹사이트를 공개하는 흐름을 봐요.', termIds:['t21','t22','t23','t24','t48','t47','t50']},
+        {id:'ai-tools', title:'AI가 다른 도구를 쓰게 하려면?', description:'AI와 외부 서비스가 연결되는 방식을 살펴봐요.', termIds:['t37','t35','t29','t34','t36']}
+      ];
       let activeCategory = '전체';
       let query = '';
       let visible = [...terms];
       let slideIndex = 0;
+      let activePath = null;
       const $ = selector => document.querySelector(selector);
       const grid = $('#grid');
       const byId = new Map(terms.map(term => [term.id, term]));
@@ -152,6 +181,26 @@
         $('#filters').innerHTML = categories.map(category => `<button class="filter" type="button" aria-pressed="${category === activeCategory}" data-category="${escapeHTML(category)}">${category === '전체' ? '✨ ' : ''}${escapeHTML(category)}</button>`).join('');
       }
 
+      function renderPathways() {
+        $('#pathways').innerHTML = learningPaths.map(path => `<button class="pathway" type="button" data-path="${path.id}"><b>${escapeHTML(path.title)}</b><small>${escapeHTML(path.description)} · 용어 ${path.termIds.length}개</small></button>`).join('');
+      }
+
+      function updatePathContext() {
+        const context = $('#pathContext');
+        const step = $('#pathStep');
+        if (!activePath) {
+          context.className = 'path-context';
+          context.innerHTML = '';
+          step.hidden = true;
+          step.textContent = '';
+          return;
+        }
+        context.className = 'path-context active';
+        context.innerHTML = `<div><strong>🧭 ${escapeHTML(activePath.title)}</strong><p>${escapeHTML(activePath.description)}</p></div><button type="button" data-exit-path>전체 용어로 돌아가기</button>`;
+        step.hidden = false;
+        step.textContent = `추천 순서 · ${slideIndex + 1} / ${visible.length}`;
+      }
+
       function renderGrid() {
         visible = matches();
         $('#resultCount').textContent = `${visible.length}개 용어`;
@@ -163,6 +212,7 @@
       function renderSlide() {
         const term = visible[slideIndex];
         const card = $('#slideCard');
+        updatePathContext();
         if (!term) {
           card.innerHTML = '<p class="empty">표시할 용어가 없어요. 검색어나 분야를 바꿔보세요.</p>';
           $('#slideCount').textContent = '0 / 0';
@@ -181,11 +231,15 @@
           ${formatExample(term)}
           ${relatedLinks(term)}`;
         $('#slideCount').textContent = `${slideIndex + 1} / ${visible.length}`;
-        $('#prevSlide').disabled = visible.length < 2;
-        $('#nextSlide').disabled = visible.length < 2;
+        $('#prevSlide').disabled = visible.length < 2 || Boolean(activePath && slideIndex === 0);
+        $('#nextSlide').disabled = visible.length < 2 || Boolean(activePath && slideIndex === visible.length - 1);
       }
 
       function setView(showSlides) {
+        if (!showSlides && activePath) {
+          activePath = null;
+          renderGrid();
+        }
         $('#indexView').style.display = showSlides ? 'none' : 'block';
         $('#slideView').style.display = showSlides ? 'block' : 'none';
         $('#indexBtn').setAttribute('aria-pressed', String(!showSlides));
@@ -193,9 +247,25 @@
         if (showSlides) renderSlide();
       }
 
+      function startPath(pathId) {
+        const path = learningPaths.find(item => item.id === pathId);
+        if (!path) return;
+        activePath = path;
+        activeCategory = '전체';
+        query = '';
+        $('#search').value = '';
+        renderFilters();
+        visible = path.termIds.map(id => byId.get(id)).filter(Boolean);
+        slideIndex = 0;
+        setView(true);
+        history.pushState({pathId, termId:visible[0]?.id}, '', visible[0] ? `#${encodeURIComponent(visible[0].id)}` : location.pathname);
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+
       function openTerm(id, updateAddress = true) {
         const target = byId.get(id);
         if (!target) return;
+        activePath = null;
         activeCategory = '전체';
         query = '';
         $('#search').value = '';
@@ -210,7 +280,9 @@
 
       function moveSlide(amount) {
         if (!visible.length) return;
-        slideIndex = (slideIndex + amount + visible.length) % visible.length;
+        slideIndex = activePath
+          ? Math.max(0, Math.min(visible.length - 1, slideIndex + amount))
+          : (slideIndex + amount + visible.length) % visible.length;
         renderSlide();
         history.replaceState({termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
       }
@@ -223,8 +295,24 @@
         renderFilters();
         renderGrid();
       });
+      $('#pathways').addEventListener('click', event => {
+        const button = event.target.closest('[data-path]');
+        if (button) startPath(button.dataset.path);
+      });
       $('#search').addEventListener('input', event => { query = event.target.value.trim(); slideIndex = 0; renderGrid(); });
       document.addEventListener('click', event => {
+        if (event.target.closest('[data-exit-path]')) {
+          activePath = null;
+          activeCategory = '전체';
+          query = '';
+          $('#search').value = '';
+          renderFilters();
+          renderGrid();
+          setView(false);
+          history.pushState({}, '', location.pathname);
+          window.scrollTo({top:0,behavior:'smooth'});
+          return;
+        }
         const button = event.target.closest('[data-open-term]');
         if (button) openTerm(button.dataset.openTerm);
       });
@@ -246,6 +334,7 @@
         else setView(false);
       });
 
+      renderPathways();
       renderFilters();
       renderGrid();
       const initialId = decodeURIComponent(location.hash.slice(1));
