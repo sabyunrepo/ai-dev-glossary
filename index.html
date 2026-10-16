@@ -37,7 +37,6 @@
     .path-context strong{font-size:14px}
     .path-context p{margin:2px 0 0;color:var(--muted);font-size:12px}
     .path-context button{flex:none;border:1px solid #c8d9bd;border-radius:10px;background:white;color:#355b37;padding:7px 10px;font-size:12px;font-weight:750}
-    .path-step{font-size:13px;color:var(--muted);font-weight:750;margin:0 0 10px}
     .filters{display:flex;gap:8px;overflow:auto;padding:2px 0 9px;margin-bottom:10px;scrollbar-width:thin}
     .filter{flex:none;background:transparent;border:1px solid var(--line);border-radius:99px;padding:8px 13px;color:#48625a;font-size:14px;font-weight:750}
     .filter[aria-pressed="true"]{background:var(--green);border-color:#a5d36d;color:#355b28}
@@ -99,7 +98,7 @@
         </div>
       </div>
       <section class="pathways" aria-label="목적별 학습 경로">
-        <div class="pathways-head"><strong>무엇을 알고 싶으세요?</strong><span>관심 있는 일을 고르면 관련 용어를 순서대로 안내해요.</span></div>
+        <div class="pathways-head"><strong>무엇을 알고 싶으세요?</strong><span>궁금한 주제를 고르면 관련 용어를 이해하기 쉬운 순서로 보여드려요.</span></div>
         <div class="pathway-list" id="pathways"></div>
       </section>
       <nav class="filters" id="filters" aria-label="분야별 용어"></nav>
@@ -112,7 +111,6 @@
 
     <section class="slide-wrap" id="slideView" aria-label="용어 한 장씩 보기">
       <div class="path-context" id="pathContext" aria-live="polite"></div>
-      <p class="path-step" id="pathStep" hidden></p>
       <article class="slide" id="slideCard" aria-live="polite"></article>
       <div class="slide-controls"><button type="button" id="prevSlide">← 이전</button><span class="slide-count" id="slideCount" aria-live="polite">0 / 0</span><button type="button" id="nextSlide">다음 →</button></div>
     </section>
@@ -147,7 +145,8 @@
       function relatedLinks(term) {
         const related = (term.related || []).map(id => byId.get(id)).filter(Boolean);
         if (!related.length) return '';
-        return `<div class="related"><span class="related-label">🔗 함께 보기</span>${related.map(item => `<button class="related-link" type="button" data-open-term="${item.id}">${escapeHTML(item.term)}</button>`).join('')}</div>`;
+        const label = activePath ? '🔗 전체 용어에서 함께 보기' : '🔗 함께 보기';
+        return `<div class="related"><span class="related-label">${label}</span>${related.map(item => `<button class="related-link" type="button" data-open-term="${item.id}">${escapeHTML(item.term)}</button>`).join('')}</div>`;
       }
 
       function aliasesLine(term) {
@@ -187,18 +186,13 @@
 
       function updatePathContext() {
         const context = $('#pathContext');
-        const step = $('#pathStep');
         if (!activePath) {
           context.className = 'path-context';
           context.innerHTML = '';
-          step.hidden = true;
-          step.textContent = '';
           return;
         }
         context.className = 'path-context active';
-        context.innerHTML = `<div><strong>🧭 ${escapeHTML(activePath.title)}</strong><p>${escapeHTML(activePath.description)}</p></div><button type="button" data-exit-path>전체 용어로 돌아가기</button>`;
-        step.hidden = false;
-        step.textContent = `추천 순서 · ${slideIndex + 1} / ${visible.length}`;
+        context.innerHTML = `<div><strong>🧭 ${escapeHTML(activePath.title)}</strong><p>${escapeHTML(activePath.description)} · 용어 ${visible.length}개</p></div><button type="button" data-exit-path>전체 용어로 돌아가기</button>`;
       }
 
       function renderGrid() {
@@ -235,11 +229,12 @@
         $('#nextSlide').disabled = visible.length < 2 || Boolean(activePath && slideIndex === visible.length - 1);
       }
 
-      function setView(showSlides) {
+      function setView(showSlides, updateAddress = true) {
         if (!showSlides && activePath) {
           activePath = null;
           renderGrid();
         }
+        if (!showSlides && updateAddress && location.hash) history.pushState({}, '', location.pathname);
         $('#indexView').style.display = showSlides ? 'none' : 'block';
         $('#slideView').style.display = showSlides ? 'block' : 'none';
         $('#indexBtn').setAttribute('aria-pressed', String(!showSlides));
@@ -284,12 +279,14 @@
           ? Math.max(0, Math.min(visible.length - 1, slideIndex + amount))
           : (slideIndex + amount + visible.length) % visible.length;
         renderSlide();
-        history.replaceState({termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
+        if (activePath) history.pushState({pathId:activePath.id,termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
+        else history.replaceState({termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
       }
 
       $('#filters').addEventListener('click', event => {
         const button = event.target.closest('[data-category]');
         if (!button) return;
+        activePath = null;
         activeCategory = button.dataset.category;
         slideIndex = 0;
         renderFilters();
@@ -299,7 +296,7 @@
         const button = event.target.closest('[data-path]');
         if (button) startPath(button.dataset.path);
       });
-      $('#search').addEventListener('input', event => { query = event.target.value.trim(); slideIndex = 0; renderGrid(); });
+      $('#search').addEventListener('input', event => { activePath = null; query = event.target.value.trim(); slideIndex = 0; renderGrid(); });
       document.addEventListener('click', event => {
         if (event.target.closest('[data-exit-path]')) {
           activePath = null;
@@ -309,7 +306,6 @@
           renderFilters();
           renderGrid();
           setView(false);
-          history.pushState({}, '', location.pathname);
           window.scrollTo({top:0,behavior:'smooth'});
           return;
         }
@@ -329,16 +325,34 @@
         }
       });
       window.addEventListener('popstate', () => {
+        const path = learningPaths.find(item => item.id === history.state?.pathId);
+        if (path) {
+          activePath = path;
+          activeCategory = '전체';
+          query = '';
+          $('#search').value = '';
+          renderFilters();
+          visible = path.termIds.map(id => byId.get(id)).filter(Boolean);
+          slideIndex = Math.max(0, visible.findIndex(term => term.id === (history.state?.termId || decodeURIComponent(location.hash.slice(1)))));
+          setView(true, false);
+          return;
+        }
         const id = decodeURIComponent(location.hash.slice(1));
         if (byId.has(id)) openTerm(id, false);
-        else setView(false);
+        else setView(false, false);
       });
 
       renderPathways();
       renderFilters();
       renderGrid();
       const initialId = decodeURIComponent(location.hash.slice(1));
-      if (byId.has(initialId)) openTerm(initialId, false);
+      const initialPath = learningPaths.find(item => item.id === history.state?.pathId);
+      if (initialPath) {
+        activePath = initialPath;
+        visible = initialPath.termIds.map(id => byId.get(id)).filter(Boolean);
+        slideIndex = Math.max(0, visible.findIndex(term => term.id === (history.state?.termId || initialId)));
+        setView(true, false);
+      } else if (byId.has(initialId)) openTerm(initialId, false);
     })();
   </script>
 </body>
