@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AI와 개발 용어를 쉬운 말, 생활 속 비유, 실제 예로 찾아보는 용어집">
+  <meta name="theme-color" content="#f7f7f0">
+  <title>AI·개발 용어 한입 사전</title>
+  <style>
+    :root{--ink:#18322e;--muted:#687b75;--paper:#f7f7f0;--card:#fffefa;--line:#dce5dd;--green:#b8ed76;--green-dark:#315d28;--blue:#dcefff;--shadow:0 14px 40px rgba(31,61,46,.09)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.55}
+    button,input{font:inherit}button{cursor:pointer}
+    .shell{max-width:1180px;margin:auto;padding:22px 20px 48px}
+    .top{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+    .brand{font-size:16px;font-weight:850;letter-spacing:-.02em}
+    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0 12px}
+    .search{flex:1 1 260px;position:relative}
+    .search span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:19px}
+    .search input{width:100%;border:1px solid var(--line);border-radius:15px;background:white;padding:13px 16px 13px 44px;outline:none}
+    .search input:focus{border-color:#73a860;box-shadow:0 0 0 3px #b8ed7648}
+    .view-toggle{display:flex;padding:4px;border:1px solid var(--line);border-radius:14px;background:white}
+    .view-toggle button{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:8px 12px;font-weight:750}
+    .view-toggle button[aria-pressed="true"]{background:var(--ink);color:white}
+    .filters{display:flex;gap:8px;overflow:auto;padding:2px 0 9px;margin-bottom:10px;scrollbar-width:thin}
+    .filter{flex:none;background:transparent;border:1px solid var(--line);border-radius:99px;padding:8px 13px;color:#48625a;font-size:14px;font-weight:750}
+    .filter[aria-pressed="true"]{background:var(--green);border-color:#a5d36d;color:#355b28}
+    .list-head{display:flex;align-items:center;justify-content:space-between;margin:8px 2px 12px;color:var(--muted);font-size:14px}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+    .term-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:17px;box-shadow:0 5px 15px rgba(32,61,48,.04);min-height:245px;display:flex;flex-direction:column}
+    .category{font-size:12px;color:var(--muted);font-weight:750}
+    .term-card h2{font-size:22px;letter-spacing:-.04em;margin:5px 0 0}
+    .aliases{font-size:12px;color:#82918b;margin:0 0 9px;overflow-wrap:anywhere}
+    .short{font-size:15px;font-weight:750;margin:0 0 10px}
+    .analogy{background:#f1f6e9;border-radius:12px;padding:10px 12px;font-size:13px;color:#405b3e;margin:0;flex:1}
+    .analogy b{color:#314c27}
+    .example{font-size:12px;color:var(--muted);margin:10px 0 0}
+    .related{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:12px}
+    .related-label{font-size:11px;color:var(--muted);font-weight:750;margin-right:2px}
+    .related-link{border:1px solid #dce8d5;background:#f8fbf4;color:#355b37;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700}
+    .related-link:hover,.related-link:focus-visible{background:#e8f5db;border-color:#a7cb8e}
+    .format-example{margin-top:12px;border:1px solid #e1e8e2;border-radius:12px;background:#fafcf9;overflow:hidden}
+    .format-example summary{cursor:pointer;padding:9px 11px;color:#42634d;font-size:12px;font-weight:800}
+    .format-example[open] summary{border-bottom:1px solid #e1e8e2}
+    .format-example pre,.slide-format pre{margin:0;padding:12px 14px;background:#18322e;color:#f4f7ed;overflow:auto;white-space:pre;tab-size:2;font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .format-note{margin:0;padding:9px 12px;color:#60736a;font-size:12px;white-space:pre-line}
+    .open-term{border:0;background:transparent;color:#42674e;padding:0;text-align:left;font:inherit;font-weight:inherit}
+    .open-term:hover{text-decoration:underline;text-underline-offset:3px}
+    .empty{background:white;border:1px dashed #b8c9bb;border-radius:20px;padding:35px;text-align:center;color:var(--muted);grid-column:1/-1}
+    .slide-wrap{display:none;max-width:800px;margin:10px auto 20px}
+    .slide{position:relative;min-height:470px;border-radius:28px;padding:clamp(24px,5vw,46px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+    .slide:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:var(--blue);right:-45px;top:-55px;opacity:.75;pointer-events:none}
+    .slide>*{position:relative;z-index:1}
+    .slide .emoji{font-size:40px}
+    .slide h2{font-size:clamp(36px,7vw,60px);letter-spacing:-.05em;line-height:1.15;margin:8px 0 8px}
+    .slide .aliases{font-size:14px;margin-bottom:20px}
+    .slide .short{font-size:clamp(18px,3vw,22px);max-width:660px}
+    .slide .analogy{font-size:17px;max-width:680px;padding:16px 18px;margin:8px 0}
+    .slide .example{font-size:14px;margin-top:7px}
+    .note{border-left:4px solid #f3cf66;background:#fff9e6;border-radius:0 12px 12px 0;padding:11px 14px;margin:15px 0 0;font-size:14px;color:#574e35}
+    .note b{display:block;margin-bottom:2px;color:#69531c}
+    .slide .related{margin-top:18px}
+    .slide-controls{display:flex;justify-content:center;align-items:center;gap:16px;margin:14px 0}
+    .slide-controls button{border:1px solid var(--line);background:white;border-radius:12px;padding:10px 16px;font-weight:800;color:var(--ink)}
+    .slide-controls button:disabled{opacity:.45;cursor:not-allowed}
+    .slide-count{font-size:14px;color:var(--muted);min-width:65px;text-align:center}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:560px){.shell{padding:14px 13px 38px}.grid{grid-template-columns:1fr}.term-card{min-height:210px}.slide{min-height:440px;border-radius:22px}.view-toggle button{padding:8px 9px;font-size:13px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top"><div class="brand">🧩 AI·개발 용어집</div></header>
+    <section aria-label="용어 찾기와 보기 방식">
+      <div class="toolbar">
+        <label class="search"><span aria-hidden="true">🔎</span><input id="search" type="search" placeholder="용어·설명·예시 검색: 토큰, HTML, 요청…" autocomplete="off" aria-label="용어·설명·예시 검색"></label>
+        <div class="view-toggle" role="group" aria-label="보기 방식">
+          <button id="indexBtn" type="button" aria-pressed="true">📚 용어 목록</button>
+          <button id="slideBtn" type="button" aria-pressed="false">🖼️ 한 장씩 보기</button>
+        </div>
+      </div>
+      <nav class="filters" id="filters" aria-label="분야별 용어"></nav>
+    </section>
+
+    <section id="indexView" aria-label="용어 목록">
+      <div class="list-head"><span id="resultCount" aria-live="polite"></span><span>용어 이름이나 함께 볼 용어를 누르면 한 장씩 열려요.</span></div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section class="slide-wrap" id="slideView" aria-label="용어 한 장씩 보기">
+      <article class="slide" id="slideCard" aria-live="polite"></article>
+      <div class="slide-controls"><button type="button" id="prevSlide">← 이전</button><span class="slide-count" id="slideCount" aria-live="polite">0 / 0</span><button type="button" id="nextSlide">다음 →</button></div>
+    </section>
+  </main>
+  <script src="terms.js"></script>
+  <script>
+    (() => {
+      const terms = window.GLOSSARY_TERMS || [];
+      const categories = ['전체', ...new Set(terms.map(term => term.category))];
+      let activeCategory = '전체';
+      let query = '';
+      let visible = [...terms];
+      let slideIndex = 0;
+      const $ = selector => document.querySelector(selector);
+      const grid = $('#grid');
+      const byId = new Map(terms.map(term => [term.id, term]));
+      const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+      const searchableText = term => [term.term, ...(term.aliases || []), term.category, term.short, term.analogy, term.example, term.note].join(' ').toLocaleLowerCase('ko');
+
+      function matches() {
+        const needle = query.toLocaleLowerCase('ko');
+        return terms.filter(term => (activeCategory === '전체' || term.category === activeCategory) && (!needle || searchableText(term).includes(needle)));
+      }
+
+      function relatedLinks(term) {
+        const related = (term.related || []).map(id => byId.get(id)).filter(Boolean);
+        if (!related.length) return '';
+        return `<div class="related"><span class="related-label">🔗 함께 보기</span>${related.map(item => `<button class="related-link" type="button" data-open-term="${item.id}">${escapeHTML(item.term)}</button>`).join('')}</div>`;
+      }
+
+      function aliasesLine(term) {
+        const aliases = (term.aliases || []).filter(Boolean);
+        return aliases.length ? `<p class="aliases">${aliases.map(escapeHTML).join(' · ')}</p>` : '';
+      }
+
+      function formatExample(term, collapsed = false) {
+        const example = term.formatExample;
+        if (!example) return '';
+        const code = `<pre><code>${escapeHTML(example.code)}</code></pre><p class="format-note">${escapeHTML(example.note)}</p>`;
+        return collapsed
+          ? `<details class="format-example"><summary>✏️ 작성 예시 보기 · ${escapeHTML(example.language)}</summary>${code}</details>`
+          : `<section class="slide-format"><span class="category">✏️ ${escapeHTML(example.label)} · ${escapeHTML(example.language)}</span>${code}</section>`;
+      }
+
+      function card(term) {
+        return `<article class="term-card" id="card-${term.id}">
+          <span class="category">${escapeHTML(term.category)}</span>
+          <h2><button class="open-term" type="button" data-open-term="${term.id}">${escapeHTML(term.emoji || '🧩')} ${escapeHTML(term.term)}</button></h2>
+          ${aliasesLine(term)}
+          <p class="short">${escapeHTML(term.short)}</p>
+          <p class="analogy"><b>비유하면</b> · ${escapeHTML(term.analogy)}</p>
+          <p class="example"><b>예:</b> ${escapeHTML(term.example)}</p>
+          ${relatedLinks(term)}
+          ${formatExample(term, true)}
+        </article>`;
+      }
+
+      function renderFilters() {
+        $('#filters').innerHTML = categories.map(category => `<button class="filter" type="button" aria-pressed="${category === activeCategory}" data-category="${escapeHTML(category)}">${category === '전체' ? '✨ ' : ''}${escapeHTML(category)}</button>`).join('');
+      }
+
+      function renderGrid() {
+        visible = matches();
+        $('#resultCount').textContent = `${visible.length}개 용어`;
+        grid.innerHTML = visible.length ? visible.map(card).join('') : '<div class="empty">🔎 찾는 용어가 없어요. 다른 말로 검색해보세요.</div>';
+        if (slideIndex >= visible.length) slideIndex = Math.max(0, visible.length - 1);
+        renderSlide();
+      }
+
+      function renderSlide() {
+        const term = visible[slideIndex];
+        const card = $('#slideCard');
+        if (!term) {
+          card.innerHTML = '<p class="empty">표시할 용어가 없어요. 검색어나 분야를 바꿔보세요.</p>';
+          $('#slideCount').textContent = '0 / 0';
+          $('#prevSlide').disabled = true;
+          $('#nextSlide').disabled = true;
+          return;
+        }
+        card.innerHTML = `<span class="emoji" aria-hidden="true">${escapeHTML(term.emoji || '🧩')}</span>
+          <span class="category">${escapeHTML(term.category)}</span>
+          <h2>${escapeHTML(term.term)}</h2>
+          ${aliasesLine(term)}
+          <p class="short">${escapeHTML(term.short)}</p>
+          <p class="analogy"><b>비유하면</b><br>${escapeHTML(term.analogy)}</p>
+          <p class="example"><b>예:</b> ${escapeHTML(term.example)}</p>
+          ${term.note ? `<div class="note"><b>💡 헷갈리기 쉬운 점</b>${escapeHTML(term.note)}</div>` : ''}
+          ${formatExample(term)}
+          ${relatedLinks(term)}`;
+        $('#slideCount').textContent = `${slideIndex + 1} / ${visible.length}`;
+        $('#prevSlide').disabled = visible.length < 2;
+        $('#nextSlide').disabled = visible.length < 2;
+      }
+
+      function setView(showSlides) {
+        $('#indexView').style.display = showSlides ? 'none' : 'block';
+        $('#slideView').style.display = showSlides ? 'block' : 'none';
+        $('#indexBtn').setAttribute('aria-pressed', String(!showSlides));
+        $('#slideBtn').setAttribute('aria-pressed', String(showSlides));
+        if (showSlides) renderSlide();
+      }
+
+      function openTerm(id, updateAddress = true) {
+        const target = byId.get(id);
+        if (!target) return;
+        activeCategory = '전체';
+        query = '';
+        $('#search').value = '';
+        renderFilters();
+        visible = terms;
+        slideIndex = visible.findIndex(term => term.id === id);
+        renderGrid();
+        setView(true);
+        if (updateAddress) history.pushState({termId:id}, '', `#${encodeURIComponent(id)}`);
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+
+      function moveSlide(amount) {
+        if (!visible.length) return;
+        slideIndex = (slideIndex + amount + visible.length) % visible.length;
+        renderSlide();
+        history.replaceState({termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
+      }
+
+      $('#filters').addEventListener('click', event => {
+        const button = event.target.closest('[data-category]');
+        if (!button) return;
+        activeCategory = button.dataset.category;
+        slideIndex = 0;
+        renderFilters();
+        renderGrid();
+      });
+      $('#search').addEventListener('input', event => { query = event.target.value.trim(); slideIndex = 0; renderGrid(); });
+      document.addEventListener('click', event => {
+        const button = event.target.closest('[data-open-term]');
+        if (button) openTerm(button.dataset.openTerm);
+      });
+      $('#indexBtn').addEventListener('click', () => setView(false));
+      $('#slideBtn').addEventListener('click', () => setView(true));
+      $('#prevSlide').addEventListener('click', () => moveSlide(-1));
+      $('#nextSlide').addEventListener('click', () => moveSlide(1));
+      document.addEventListener('keydown', event => {
+        if (event.target.matches('input,textarea,button')) return;
+        if ($('#slideView').style.display === 'block') {
+          if (event.key === 'ArrowRight') moveSlide(1);
+          if (event.key === 'ArrowLeft') moveSlide(-1);
+          if (event.key === 'Escape') setView(false);
+        }
+      });
+      window.addEventListener('popstate', () => {
+        const id = decodeURIComponent(location.hash.slice(1));
+        if (byId.has(id)) openTerm(id, false);
+        else setView(false);
+      });
+
+      renderFilters();
+      renderGrid();
+      const initialId = decodeURIComponent(location.hash.slice(1));
+      if (byId.has(initialId)) openTerm(initialId, false);
+    })();
+  </script>
+</body>
+</html>
