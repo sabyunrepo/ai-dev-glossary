@@ -6,7 +6,7 @@
   <meta name="description" content="AI와 개발 용어를 쉬운 말, 생활 속 비유, 실제 예로 찾아보는 용어집">
   <meta name="theme-color" content="#f7f7f0">
   <title>AI·개발 용어 한입 사전</title>
-  <link rel="stylesheet" href="styles.css?v=readable-20261019">
+  <link rel="stylesheet" href="styles.css?v=all-terms-20261019">
 </head>
 <body>
   <main class="shell">
@@ -38,7 +38,7 @@
       <div class="slide-controls"><button type="button" id="prevSlide">← 이전</button><span class="slide-count" id="slideCount" aria-live="polite">0 / 0</span><button type="button" id="nextSlide">다음 →</button></div>
     </section>
   </main>
-  <script src="terms.js?v=env-examples-20261019"></script>
+  <script src="terms.js?v=all-terms-20261019"></script>
   <script>
     (() => {
       const terms = window.GLOSSARY_TERMS || [];
@@ -58,7 +58,7 @@
       const grid = $('#grid');
       const byId = new Map(terms.map(term => [term.id, term]));
       const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-      const searchableText = term => [term.term, ...(term.aliases || []), term.category, term.short, term.analogy, term.example, term.note].join(' ').toLocaleLowerCase('ko');
+      const searchableText = term => [term.term, ...(term.aliases || []), term.category, term.short, term.analogy, term.example, term.note, term.formatExample?.label, term.formatExample?.language, term.formatExample?.code].filter(Boolean).join(' ').toLocaleLowerCase('ko');
 
       function matches() {
         const needle = query.toLocaleLowerCase('ko');
@@ -75,6 +75,11 @@
       function aliasesLine(term) {
         const aliases = (term.aliases || []).filter(Boolean);
         return aliases.length ? `<p class="aliases">${aliases.map(escapeHTML).join(' · ')}</p>` : '';
+      }
+
+      function sourceLinks(term) {
+        const sources = (term.sources || []).filter(source => /^https:\/\//.test(source.url));
+        return sources.length ? `<div class="sources">${sources.map(source => `<a href="${escapeHTML(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHTML(source.label)} ↗</a>`).join('')}</div>` : '';
       }
 
       function formatExample(term) {
@@ -140,10 +145,10 @@
           <h2>${escapeHTML(term.term)}</h2>
           ${aliasesLine(term)}</header>
           <p class="short">${escapeHTML(term.short)}</p>
-          <section class="reading-block"><h3><span class="block-emoji" aria-hidden="true">💭</span>비유하면</h3><p>${escapeHTML(term.analogy)}</p></section>
+          <section class="reading-block"><h3><span class="block-emoji" aria-hidden="true">${escapeHTML(term.analogyEmoji || '💭')}</span>비유하면</h3><p>${escapeHTML(term.analogy)}</p></section>
           <section class="reading-block example-block"><h3><span class="block-emoji" aria-hidden="true">📍</span>이럴 때 써요</h3><p>${escapeHTML(term.example)}</p></section>
           ${formatExample(term)}
-          ${term.note ? `<details class="note"><summary><span>💡 알아두면 좋아요</span><span class="disclosure-mark" aria-hidden="true"></span></summary><p>${escapeHTML(term.note)}</p></details>` : ''}
+          ${term.note ? `<details class="note"><summary><span>💡 알아두면 좋아요</span><span class="disclosure-mark" aria-hidden="true"></span></summary><p>${escapeHTML(term.note)}</p>${sourceLinks(term)}</details>` : ''}
           ${relatedLinks(term)}`;
         $('#slideCount').textContent = `${slideIndex + 1} / ${visible.length}`;
         $('#prevSlide').disabled = visible.length < 2 || Boolean(activePath && slideIndex === 0);

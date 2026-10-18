@@ -1,0 +1,4 @@
+interface:
+  display_name: "쉬운 용어집 편집"
+  short_description: "AI·개발 용어를 성인 초보자용 비유와 파일 예시로 편집합니다"
+  default_prompt: "$glossary-eli5 스킬로 이 용어집에 새 용어를 추가하고 쉬운 비유와 실제 예시를 작성해줘."
