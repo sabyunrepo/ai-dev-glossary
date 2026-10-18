@@ -59,11 +59,16 @@
     .format-example[open] summary{border-bottom:1px solid #e1e8e2}
     .format-example pre,.slide-format pre{margin:0;padding:12px 14px;background:#18322e;color:#f4f7ed;overflow:auto;white-space:pre;tab-size:2;font:12px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
     .format-note{margin:0;padding:9px 12px;color:#60736a;font-size:12px;white-space:pre-line}
+    .format-annotations{padding:11px 12px 12px;background:#f2f6ee;border-top:1px solid #e1e8e2}
+    .format-annotations strong{display:block;margin-bottom:7px;color:#405b3e;font-size:12px}
+    .format-annotations ul{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+    .format-annotations li{display:grid;grid-template-columns:minmax(110px,.8fr) minmax(0,1.2fr);gap:10px;align-items:start;font-size:12px;color:#52675c}
+    .format-annotations code{overflow-wrap:anywhere;color:#315d28;font:600 11px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
     .open-term{border:0;background:transparent;color:#42674e;padding:0;text-align:left;font:inherit;font-weight:inherit}
     .open-term:hover{text-decoration:underline;text-underline-offset:3px}
     .empty{background:white;border:1px dashed #b8c9bb;border-radius:20px;padding:35px;text-align:center;color:var(--muted);grid-column:1/-1}
     .slide-wrap{display:none;max-width:800px;margin:10px auto 20px}
-    .slide{position:relative;min-height:470px;border-radius:28px;padding:clamp(24px,5vw,46px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+    .slide{position:relative;min-height:470px;border-radius:28px;padding:clamp(24px,5vw,46px);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden}
     .slide:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:var(--blue);right:-45px;top:-55px;opacity:.75;pointer-events:none}
     .slide>*{position:relative;z-index:1}
     .slide .emoji{font-size:40px}
@@ -82,7 +87,7 @@
     .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
     @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:760px){.pathway-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:560px){.shell{padding:14px 13px 38px}.grid{grid-template-columns:1fr}.term-card{min-height:210px}.slide{min-height:440px;border-radius:22px}.view-toggle button{padding:8px 9px;font-size:13px}.pathways{padding:12px}.pathways-head{display:block}.pathways-head span{display:block;margin-top:2px}.pathway{padding:9px}.path-context.active{align-items:flex-start;flex-direction:column}}
+    @media(max-width:560px){.shell{padding:14px 13px 38px}.grid{grid-template-columns:1fr}.term-card{min-height:210px}.slide{min-height:440px;border-radius:22px}.view-toggle button{padding:8px 9px;font-size:13px}.pathways{padding:12px}.pathways-head{display:block}.pathways-head span{display:block;margin-top:2px}.pathway{padding:9px}.path-context.active{align-items:flex-start;flex-direction:column}.format-annotations li{grid-template-columns:1fr;gap:1px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
   </style>
 </head>
@@ -157,7 +162,9 @@
       function formatExample(term, collapsed = false) {
         const example = term.formatExample;
         if (!example) return '';
-        const code = `<pre><code>${escapeHTML(example.code)}</code></pre><p class="format-note">${escapeHTML(example.note)}</p>`;
+        const annotations = (example.annotations || []).map(item => `<li><code>${escapeHTML(item.code)}</code><span>${escapeHTML(item.text)}</span></li>`).join('');
+        const readingGuide = annotations ? `<div class="format-annotations"><strong>쉽게 읽기</strong><ul>${annotations}</ul></div>` : '';
+        const code = `<pre><code>${escapeHTML(example.code)}</code></pre>${readingGuide}<p class="format-note">${escapeHTML(example.note)}</p>`;
         return collapsed
           ? `<details class="format-example"><summary>✏️ 작성 예시 보기 · ${escapeHTML(example.language)}</summary>${code}</details>`
           : `<section class="slide-format"><span class="category">✏️ ${escapeHTML(example.label)} · ${escapeHTML(example.language)}</span>${code}</section>`;
