@@ -6,7 +6,7 @@
   <meta name="description" content="AI와 개발 용어를 쉬운 말, 생활 속 비유, 실제 예로 찾아보는 용어집">
   <meta name="theme-color" content="#f7f7f0">
   <title>AI·개발 용어 한입 사전</title>
-  <link rel="stylesheet" href="styles.css?v=illustrations-20261019">
+  <link rel="stylesheet" href="styles.css?v=card-navigation-20261019">
 </head>
 <body>
   <main class="shell">
@@ -54,6 +54,14 @@
       let visible = [...terms];
       let slideIndex = 0;
       let activePath = null;
+      let lastListState = null;
+      let focusedTermId = null;
+      let restoring = false;
+      let scrollFrame = 0;
+      let navigationVersion = 0;
+      let currentEntry = null;
+      const entryCache = new Map();
+      history.scrollRestoration = 'manual';
       const $ = selector => document.querySelector(selector);
       const grid = $('#grid');
       const byId = new Map(terms.map(term => [term.id, term]));
@@ -98,14 +106,14 @@
       }
 
       function card(term) {
-        return `<article class="term-card" id="card-${term.id}">
+        return `<a class="term-card" id="card-${term.id}" href="#${term.id}" data-open-term="${term.id}" aria-labelledby="title-${term.id}" aria-describedby="short-${term.id}">
           <span class="card-emoji" aria-hidden="true">${escapeHTML(term.emoji || '🧩')}</span>
           <span class="category">${escapeHTML(term.category)}</span>
-          <h2><button class="open-term" type="button" data-open-term="${term.id}">${escapeHTML(term.term)}</button></h2>
+          <h2 id="title-${term.id}">${escapeHTML(term.term)}</h2>
           ${aliasesLine(term)}
-          <p class="short">${escapeHTML(term.short)}</p>
-          <button class="read-more" type="button" data-open-term="${term.id}" aria-label="${escapeHTML(term.term)} 그림과 예시 보기">그림과 예시 보기 →</button>
-        </article>`;
+          <p class="short" id="short-${term.id}">${escapeHTML(term.short)}</p>
+          <span class="read-more" aria-hidden="true">그림과 예시 보기 →</span>
+        </a>`;
       }
 
       function renderFilters() {
@@ -124,11 +132,11 @@
           return;
         }
         context.className = 'path-context active';
-        context.innerHTML = `<div><strong>🧭 ${escapeHTML(activePath.title)}</strong><p>${escapeHTML(activePath.description)} · 용어 ${visible.length}개</p></div><button type="button" data-exit-path>전체 용어로 돌아가기</button>`;
+        context.innerHTML = `<div><strong>🧭 ${escapeHTML(activePath.title)}</strong><p>${escapeHTML(activePath.description)} · 용어 ${visible.length}개</p></div><button type="button" data-exit-path>용어 목록으로 돌아가기</button>`;
       }
 
       function renderGrid() {
-        visible = matches();
+        visible = activePath ? activePath.termIds.map(id => byId.get(id)).filter(Boolean) : matches();
         $('#resultCount').textContent = `${visible.length}개 용어`;
         grid.innerHTML = visible.length ? visible.map(card).join('') : '<div class="empty">🔎 찾는 용어가 없어요. 다른 말로 검색해보세요.</div>';
         if (slideIndex >= visible.length) slideIndex = Math.max(0, visible.length - 1);
@@ -149,7 +157,7 @@
         }
         card.innerHTML = `<header class="term-heading"><span class="emoji" aria-hidden="true">${escapeHTML(term.emoji || '🧩')}</span>
           <span class="category">${escapeHTML(term.category)}</span>
-          <h2>${escapeHTML(term.term)}</h2>
+          <h2 tabindex="-1">${escapeHTML(term.term)}</h2>
           ${aliasesLine(term)}</header>
           ${illustration(term)}
           <p class="short">${escapeHTML(term.short)}</p>
@@ -163,12 +171,7 @@
         $('#nextSlide').disabled = visible.length < 2 || Boolean(activePath && slideIndex === visible.length - 1);
       }
 
-      function setView(showSlides, updateAddress = true) {
-        if (!showSlides && activePath) {
-          activePath = null;
-          renderGrid();
-        }
-        if (!showSlides && updateAddress && location.hash) history.pushState({}, '', location.pathname);
+      function setView(showSlides) {
         $('#indexView').style.display = showSlides ? 'none' : 'block';
         $('#slideView').style.display = showSlides ? 'block' : 'none';
         $('#indexBtn').setAttribute('aria-pressed', String(!showSlides));
@@ -176,33 +179,156 @@
         if (showSlides) renderSlide();
       }
 
+      function termFromAddress() {
+        try { return decodeURIComponent(location.hash.slice(1)); }
+        catch { return ''; }
+      }
+
+      function addressFor(state) {
+        const base = location.pathname + location.search;
+        return state.view === 'term' && state.termId ? `${base}#${encodeURIComponent(state.termId)}` : base;
+      }
+
+      function snapshot() {
+        const reading = $('#slideView').style.display === 'block';
+        return {
+          glossary: true,
+          key: currentEntry?.key || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          view: reading ? 'term' : 'index',
+          termId: visible[slideIndex]?.id || null,
+          category: activeCategory,
+          query,
+          pathId: activePath?.id || null,
+          scrollX: window.scrollX,
+          scrollY: window.scrollY,
+          filtersScroll: $('#filters').scrollLeft,
+          pathsOpen: $('.pathways').open,
+          openDetails: [...$('#slideCard').querySelectorAll('details')].flatMap((item, i) => item.open ? [i] : []),
+          focusTermId: focusedTermId,
+          listOffset: reading ? (currentEntry?.listOffset || 0) : 0,
+          returnList: reading ? lastListState : null
+        };
+      }
+
+      function cacheEntry() {
+        if (restoring) return;
+        const state = snapshot();
+        if (state.view === 'index') lastListState = state;
+        currentEntry = state;
+        entryCache.set(state.key, state);
+        return state;
+      }
+
+      function saveEntry() {
+        const state = cacheEntry();
+        if (state) history.replaceState(state, '', addressFor(state));
+      }
+
+      // Keep each history entry's viewport and controls, rather than only its term ID.
+      function restoreEntry(state) {
+        state = {...state, key:state.key || `${Date.now()}-${Math.random().toString(36).slice(2)}`};
+        currentEntry = state;
+        entryCache.set(state.key, state);
+        restoring = true;
+        cancelAnimationFrame(scrollFrame);
+        scrollFrame = 0;
+        const version = ++navigationVersion;
+        activeCategory = categories.includes(state.category) ? state.category : '전체';
+        query = typeof state.query === 'string' ? state.query : '';
+        activePath = learningPaths.find(item => item.id === state.pathId) || null;
+        focusedTermId = state.focusTermId || null;
+        lastListState = state.view === 'index' ? state : (state.returnList || lastListState);
+        $('#search').value = query;
+        $('.pathways').open = Boolean(state.pathsOpen);
+        renderFilters();
+        visible = activePath ? activePath.termIds.map(id => byId.get(id)).filter(Boolean) : matches();
+        slideIndex = Math.max(0, visible.findIndex(term => term.id === state.termId));
+        renderGrid();
+        setView(state.view === 'term');
+        [...$('#slideCard').querySelectorAll('details')].forEach((item, i) => {
+          item.open = (state.openDetails || []).includes(i);
+        });
+        $('#filters').scrollLeft = state.filtersScroll || 0;
+        requestAnimationFrame(() => {
+          if (version !== navigationVersion) return;
+          if (state.view === 'index' && byId.has(focusedTermId)) {
+            document.getElementById(`card-${focusedTermId}`)?.focus({preventScroll:true});
+          }
+          window.scrollTo({left:state.scrollX || 0, top:state.scrollY || 0, behavior:'instant'});
+          requestAnimationFrame(() => {
+            if (version !== navigationVersion) return;
+            restoring = false;
+            saveEntry();
+          });
+        });
+      }
+
       function scrollToReading() {
-        requestAnimationFrame(() => $('#slideView').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}));
+        restoring = true;
+        cancelAnimationFrame(scrollFrame);
+        scrollFrame = 0;
+        const version = ++navigationVersion;
+        requestAnimationFrame(() => {
+          if (version !== navigationVersion) return;
+          $('#slideCard h2')?.focus({preventScroll:true});
+          $('#slideView').scrollIntoView({block:'start', behavior:'instant'});
+          requestAnimationFrame(() => {
+            if (version !== navigationVersion) return;
+            restoring = false;
+            saveEntry();
+          });
+        });
+      }
+
+      function pushReadingEntry() {
+        const previous = currentEntry;
+        const state = snapshot();
+        state.key = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+        state.listOffset = previous?.view === 'index' ? 1 : (previous?.listOffset ? previous.listOffset + 1 : 0);
+        state.scrollX = 0;
+        state.scrollY = 0;
+        state.openDetails = [];
+        history.pushState(state, '', addressFor(state));
+        currentEntry = state;
+        entryCache.set(state.key, state);
+        scrollToReading();
       }
 
       function returnToIndex() {
-        setView(false);
-        $('.toolbar').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+        if ($('#slideView').style.display !== 'block') return;
+        saveEntry();
+        const offset = history.state?.listOffset || 0;
+        if (offset > 0) {
+          history.go(-offset);
+          return;
+        }
+        const state = lastListState || {
+          glossary:true, view:'index', category:'전체', query:'', pathId:null,
+          scrollX:0, scrollY:0, listOffset:0, returnList:null
+        };
+        history.replaceState(state, '', addressFor(state));
+        restoreEntry(state);
       }
 
       function startPath(pathId) {
         const path = learningPaths.find(item => item.id === pathId);
         if (!path) return;
+        saveEntry();
         activePath = path;
         activeCategory = '전체';
         query = '';
         $('#search').value = '';
         renderFilters();
-        visible = path.termIds.map(id => byId.get(id)).filter(Boolean);
         slideIndex = 0;
+        renderGrid();
         setView(true);
-        history.pushState({pathId, termId:visible[0]?.id}, '', visible[0] ? `#${encodeURIComponent(visible[0].id)}` : location.pathname);
-        scrollToReading();
+        pushReadingEntry();
       }
 
-      function openTerm(id, updateAddress = true) {
-        const target = byId.get(id);
-        if (!target) return;
+      function openTerm(id) {
+        if (!byId.has(id)) return;
+        if ($('#indexView').style.display !== 'none') focusedTermId = id;
+        saveEntry();
         activePath = null;
         activeCategory = '전체';
         query = '';
@@ -212,19 +338,19 @@
         slideIndex = visible.findIndex(term => term.id === id);
         renderGrid();
         setView(true);
-        if (updateAddress) history.pushState({termId:id}, '', `#${encodeURIComponent(id)}`);
-        scrollToReading();
+        pushReadingEntry();
       }
 
       function moveSlide(amount) {
         if (!visible.length) return;
+        saveEntry();
+        const previousIndex = slideIndex;
         slideIndex = activePath
           ? Math.max(0, Math.min(visible.length - 1, slideIndex + amount))
           : (slideIndex + amount + visible.length) % visible.length;
+        if (slideIndex === previousIndex) return;
         renderSlide();
-        if (activePath) history.pushState({pathId:activePath.id,termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
-        else history.replaceState({termId:visible[slideIndex].id}, '', `#${encodeURIComponent(visible[slideIndex].id)}`);
-        scrollToReading();
+        pushReadingEntry();
       }
 
       $('#filters').addEventListener('click', event => {
@@ -235,71 +361,91 @@
         slideIndex = 0;
         renderFilters();
         renderGrid();
+        saveEntry();
       });
       $('#pathways').addEventListener('click', event => {
         const button = event.target.closest('[data-path]');
         if (button) startPath(button.dataset.path);
       });
-      $('#search').addEventListener('input', event => { activePath = null; query = event.target.value.trim(); slideIndex = 0; renderGrid(); });
+      $('#search').addEventListener('input', event => {
+        activePath = null;
+        query = event.target.value.trim();
+        slideIndex = 0;
+        renderGrid();
+        saveEntry();
+      });
+      $('.pathways').addEventListener('toggle', saveEntry);
+      $('#slideCard').addEventListener('toggle', saveEntry, true);
+      $('#filters').addEventListener('scroll', cacheEntry, {passive:true});
       document.addEventListener('click', event => {
         if (event.target.closest('[data-exit-path]')) {
-          activePath = null;
-          activeCategory = '전체';
-          query = '';
-          $('#search').value = '';
-          renderFilters();
-          renderGrid();
-          setView(false);
-          window.scrollTo({top:0,behavior:'smooth'});
+          returnToIndex();
           return;
         }
-        const button = event.target.closest('[data-open-term]');
-        if (button) openTerm(button.dataset.openTerm);
+        const target = event.target.closest('[data-open-term]');
+        if (!target) return;
+        // Keep normal link gestures, including opening a card in a new tab.
+        if (target.matches('a') && (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
+        event.preventDefault();
+        openTerm(target.dataset.openTerm);
       });
       $('#indexBtn').addEventListener('click', returnToIndex);
       $('#returnIndex').addEventListener('click', returnToIndex);
-      $('#slideBtn').addEventListener('click', () => { setView(true); scrollToReading(); });
+      $('#slideBtn').addEventListener('click', () => {
+        if ($('#slideView').style.display === 'block' || !visible.length) return;
+        saveEntry();
+        setView(true);
+        pushReadingEntry();
+      });
       $('#prevSlide').addEventListener('click', () => moveSlide(-1));
       $('#nextSlide').addEventListener('click', () => moveSlide(1));
       document.addEventListener('keydown', event => {
-        if (event.target.matches('input,textarea,button,summary')) return;
+        if (event.target.closest('input,textarea,button,summary,a')) return;
         if ($('#slideView').style.display === 'block') {
           if (event.key === 'ArrowRight') moveSlide(1);
           if (event.key === 'ArrowLeft') moveSlide(-1);
           if (event.key === 'Escape') returnToIndex();
         }
       });
-      window.addEventListener('popstate', () => {
-        const path = learningPaths.find(item => item.id === history.state?.pathId);
-        if (path) {
-          activePath = path;
-          activeCategory = '전체';
-          query = '';
-          $('#search').value = '';
-          renderFilters();
-          visible = path.termIds.map(id => byId.get(id)).filter(Boolean);
-          slideIndex = Math.max(0, visible.findIndex(term => term.id === (history.state?.termId || decodeURIComponent(location.hash.slice(1)))));
-          setView(true, false);
-          scrollToReading();
+      window.addEventListener('scroll', () => {
+        if (restoring || scrollFrame) return;
+        scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; cacheEntry(); });
+      }, {passive:true});
+      window.addEventListener('pagehide', saveEntry);
+      window.addEventListener('pageshow', event => {
+        if (event.persisted && history.state?.glossary) restoreEntry(entryCache.get(history.state.key) || history.state);
+      });
+      window.addEventListener('popstate', event => {
+        cacheEntry();
+        if (event.state?.glossary) {
+          restoreEntry(entryCache.get(event.state.key) || event.state);
           return;
         }
-        const id = decodeURIComponent(location.hash.slice(1));
-        if (byId.has(id)) openTerm(id, false);
-        else setView(false, false);
+        const id = termFromAddress();
+        const state = {
+          glossary:true, view:byId.has(id) ? 'term' : 'index', termId:id,
+          category:'전체', query:'', pathId:event.state?.pathId || null,
+          scrollX:0, scrollY:0, listOffset:0, returnList:null
+        };
+        history.replaceState(state, '', addressFor(state));
+        restoreEntry(state);
+        if (state.view === 'term') scrollToReading();
       });
 
       renderPathways();
-      renderFilters();
-      renderGrid();
-      const initialId = decodeURIComponent(location.hash.slice(1));
-      const initialPath = learningPaths.find(item => item.id === history.state?.pathId);
-      if (initialPath) {
-        activePath = initialPath;
-        visible = initialPath.termIds.map(id => byId.get(id)).filter(Boolean);
-        slideIndex = Math.max(0, visible.findIndex(term => term.id === (history.state?.termId || initialId)));
-        setView(true, false);
-        scrollToReading();
-      } else if (byId.has(initialId)) openTerm(initialId, false);
+      const initialId = termFromAddress();
+      if (history.state?.glossary) {
+        restoreEntry(history.state);
+      } else {
+        renderFilters();
+        activePath = learningPaths.find(item => item.id === history.state?.pathId) || null;
+        visible = activePath ? activePath.termIds.map(id => byId.get(id)).filter(Boolean) : terms;
+        slideIndex = Math.max(0, visible.findIndex(term => term.id === initialId));
+        renderGrid();
+        setView(byId.has(initialId));
+        saveEntry();
+        if (byId.has(initialId)) scrollToReading();
+      }
     })();
   </script>
 </body>
