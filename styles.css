@@ -52,7 +52,6 @@ details[open] > summary .disclosure-mark::before { content: "−"; }
 .term-card h2 { font-size: 27px; line-height: 1.4; letter-spacing: -.04em; margin: 5px 0 8px; }
 .aliases { margin: 0; font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
 .term-card .short { flex: 1; margin: 24px 0; font-size: 18px; line-height: 1.8; }
-.read-more { align-self: flex-start; border: 0; border-radius: 10px; background: #edf5e5; padding: 10px 14px; min-height: 46px; color: #355b28; font-size: 15px; font-weight: 750; }
 .related { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .related-label { flex-basis: 100%; margin-bottom: 2px; color: var(--muted); font-size: 15px; font-weight: 700; }
 .related-link { min-height: 44px; border: 1px solid #d7e3cf; background: #f7faf3; color: #355b37; border-radius: 99px; padding: 8px 16px; font-size: 16px; font-weight: 650; }
