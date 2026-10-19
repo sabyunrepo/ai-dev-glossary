@@ -80,21 +80,20 @@ details[open] > summary .disclosure-mark::before { content: "−"; }
 .reading-block.example-block { background: #eef5fa; }
 .example-block h3 { color: #436374; }
 .format-example { margin-top: 32px; border: 1px solid var(--line); border-radius: 20px; background: #fafcf8; overflow: hidden; }
-.format-example > summary { display: flex; align-items: center; gap: 14px; min-height: 80px; padding: 22px; }
+.format-example-header { display: flex; align-items: center; gap: 14px; min-height: 80px; padding: 22px; border-bottom: 1px solid var(--line); }
 .format-symbol { flex: none; font-size: 32px; line-height: 1; }
 .format-title { flex: 1; min-width: 0; }
-.format-title strong { display: block; font-size: 18px; }
+.format-title h3 { margin: 0; font-size: 18px; }
 .format-title small { display: block; color: var(--muted); font-size: 14px; margin-top: 3px; }
-.format-example[open] > summary { border-bottom: 1px solid var(--line); }
 .format-example pre { margin: 0; padding: 24px; background: #18322e; color: #f4f7ed; white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word; tab-size: 2; font: 15px/1.9 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
 .format-annotations { border-bottom: 1px solid var(--line); background: #f3f7ee; }
-.format-annotations > summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 64px; padding: 16px 22px; color: #405b3e; font-size: 16px; font-weight: 750; }
+.format-annotations h4 { margin: 0; min-height: 64px; padding: 16px 22px; color: #405b3e; font-size: 16px; font-weight: 750; }
 .format-annotations ul { display: grid; gap: 14px; margin: 0; padding: 0 20px 20px; list-style: none; }
 .format-annotations li { display: grid; gap: 10px; padding: 18px; border: 1px solid #dce6d4; border-radius: 13px; background: white; font-size: 17px; line-height: 1.75; }
 .format-annotations code { color: #315d28; font: 650 14px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-wrap: anywhere; }
 .format-note { margin: 0; padding: 22px; color: var(--muted); font-size: 15px; line-height: 1.85; white-space: pre-line; }
 .note { margin-top: 24px; border: 1px solid #eedfab; border-radius: 18px; background: #fff9e9; }
-.note > summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 22px; min-height: 64px; font-size: 17px; font-weight: 700; color: #665323; }
+.note h3 { margin: 0; padding: 18px 22px; min-height: 64px; font-size: 17px; font-weight: 700; color: #665323; }
 .note p { margin: 0; padding: 0 22px 22px; font-size: 17px; line-height: 1.85; color: #62563c; }
 .sources { display: flex; flex-wrap: wrap; gap: 10px; padding: 0 22px 20px; }
 .sources a { display: inline-flex; align-items: center; min-height: 44px; color: #4e602c; font-size: 15px; text-underline-offset: 4px; }
@@ -136,9 +135,9 @@ details[open] > summary .disclosure-mark::before { content: "−"; }
   .term-illustration a { border-radius: 14px; }
   .reading-block { margin-top: 32px; padding: 24px 20px; border-radius: 18px; }
   .reading-block p { font-size: 20px; }
-  .format-example > summary { padding: 20px 16px; gap: 12px; }
+  .format-example-header { padding: 20px 16px; gap: 12px; }
   .format-example pre { padding: 20px 16px; font-size: 14px; }
-  .format-annotations > summary { padding: 16px; }
+  .format-annotations h4 { padding: 16px; }
   .format-annotations ul { padding: 0 14px 14px; }
   .format-note { padding: 20px 16px; }
   .slide-controls { gap: 10px; }

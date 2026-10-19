@@ -6,7 +6,7 @@
   <meta name="description" content="AI와 개발 용어를 쉬운 말, 생활 속 비유, 실제 예로 찾아보는 용어집">
   <meta name="theme-color" content="#f7f7f0">
   <title>AI·개발 용어 한입 사전</title>
-  <link rel="stylesheet" href="styles.css?v=clean-cards-20261019">
+  <link rel="stylesheet" href="styles.css?v=always-visible-20261019">
 </head>
 <body>
   <main class="shell">
@@ -94,9 +94,9 @@
         const example = term.formatExample;
         if (!example) return '';
         const annotations = (example.annotations || []).map(item => `<li><code>${escapeHTML(item.code)}</code><span>${escapeHTML(item.text)}</span></li>`).join('');
-        const readingGuide = annotations ? `<details class="format-annotations"><summary>한 줄씩 쉽게 읽기<span class="disclosure-mark" aria-hidden="true"></span></summary><ul>${annotations}</ul></details>` : '';
+        const readingGuide = annotations ? `<section class="format-annotations"><h4>한 줄씩 쉽게 읽기</h4><ul>${annotations}</ul></section>` : '';
         const code = `<pre><code>${escapeHTML(example.code)}</code></pre>${readingGuide}<p class="format-note">${escapeHTML(example.note)}</p>`;
-        return `<details class="format-example"><summary><span class="format-symbol" aria-hidden="true">🧾</span><span class="format-title"><strong>실제 작성 모습</strong><small>${escapeHTML(example.language)} · ${escapeHTML(example.label)}</small></span><span class="disclosure-mark" aria-hidden="true"></span></summary>${code}</details>`;
+        return `<section class="format-example"><header class="format-example-header"><span class="format-symbol" aria-hidden="true">🧾</span><div class="format-title"><h3>실제 작성 모습</h3><small>${escapeHTML(example.language)} · ${escapeHTML(example.label)}</small></div></header>${code}</section>`;
       }
 
       function illustration(term) {
@@ -163,7 +163,7 @@
           <section class="reading-block"><h3><span class="block-emoji" aria-hidden="true">${escapeHTML(term.analogyEmoji || '💭')}</span>비유하면</h3><p>${escapeHTML(term.analogy)}</p></section>
           <section class="reading-block example-block"><h3><span class="block-emoji" aria-hidden="true">📍</span>이럴 때 써요</h3><p>${escapeHTML(term.example)}</p></section>
           ${formatExample(term)}
-          ${term.note ? `<details class="note"><summary><span>💡 알아두면 좋아요</span><span class="disclosure-mark" aria-hidden="true"></span></summary><p>${escapeHTML(term.note)}</p>${sourceLinks(term)}</details>` : ''}
+          ${term.note ? `<section class="note"><h3>💡 알아두면 좋아요</h3><p>${escapeHTML(term.note)}</p>${sourceLinks(term)}</section>` : ''}
           ${relatedLinks(term)}`;
         $('#slideCount').textContent = `${slideIndex + 1} / ${visible.length}`;
         $('#prevSlide').disabled = visible.length < 2 || Boolean(activePath && slideIndex === 0);
@@ -202,7 +202,6 @@
           scrollY: window.scrollY,
           filtersScroll: $('#filters').scrollLeft,
           pathsOpen: $('.pathways').open,
-          openDetails: [...$('#slideCard').querySelectorAll('details')].flatMap((item, i) => item.open ? [i] : []),
           focusTermId: focusedTermId,
           listOffset: reading ? (currentEntry?.listOffset || 0) : 0,
           returnList: reading ? lastListState : null
@@ -244,9 +243,6 @@
         slideIndex = Math.max(0, visible.findIndex(term => term.id === state.termId));
         renderGrid();
         setView(state.view === 'term');
-        [...$('#slideCard').querySelectorAll('details')].forEach((item, i) => {
-          item.open = (state.openDetails || []).includes(i);
-        });
         $('#filters').scrollLeft = state.filtersScroll || 0;
         requestAnimationFrame(() => {
           if (version !== navigationVersion) return;
@@ -286,7 +282,6 @@
         state.listOffset = previous?.view === 'index' ? 1 : (previous?.listOffset ? previous.listOffset + 1 : 0);
         state.scrollX = 0;
         state.scrollY = 0;
-        state.openDetails = [];
         history.pushState(state, '', addressFor(state));
         currentEntry = state;
         entryCache.set(state.key, state);
@@ -374,7 +369,6 @@
         saveEntry();
       });
       $('.pathways').addEventListener('toggle', saveEntry);
-      $('#slideCard').addEventListener('toggle', saveEntry, true);
       $('#filters').addEventListener('scroll', cacheEntry, {passive:true});
       document.addEventListener('click', event => {
         if (event.target.closest('[data-exit-path]')) {
