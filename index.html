@@ -6,11 +6,11 @@
   <meta name="description" content="AI와 개발 용어를 쉬운 말, 생활 속 비유, 실제 예로 찾아보는 용어집">
   <meta name="theme-color" content="#f7f7f0">
   <title>AI·개발 용어 한입 사전</title>
-  <link rel="stylesheet" href="styles.css?v=always-visible-20261019">
+  <link rel="stylesheet" href="styles.css?v=home-link-20261019">
 </head>
 <body>
   <main class="shell">
-    <header class="top"><div class="brand">🧩 AI·개발 용어집</div></header>
+    <header class="top"><a class="brand" id="homeLink" href="./" aria-label="AI·개발 용어집 홈">🧩 AI·개발 용어집</a></header>
     <section aria-label="용어 찾기와 보기 방식">
       <div class="toolbar">
         <label class="search"><span aria-hidden="true">🔎</span><input id="search" type="search" placeholder="토큰, HTML, 환경변수…" autocomplete="off" aria-label="용어·설명·예시 검색"></label>
@@ -304,6 +304,20 @@
         restoreEntry(state);
       }
 
+      function goHome() {
+        saveEntry();
+        const state = {
+          glossary:true,
+          key:`${Date.now()}-${Math.random().toString(36).slice(2)}`,
+          view:'index', termId:terms[0]?.id || null,
+          category:'전체', query:'', pathId:null,
+          scrollX:0, scrollY:0, filtersScroll:0, pathsOpen:false,
+          focusTermId:null, listOffset:0, returnList:null
+        };
+        history.pushState(state, '', addressFor(state));
+        restoreEntry(state);
+      }
+
       function startPath(pathId) {
         const path = learningPaths.find(item => item.id === pathId);
         if (!path) return;
@@ -381,6 +395,11 @@
         if (target.matches('a') && (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
         event.preventDefault();
         openTerm(target.dataset.openTerm);
+      });
+      $('#homeLink').addEventListener('click', event => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        goHome();
       });
       $('#indexBtn').addEventListener('click', returnToIndex);
       $('#returnIndex').addEventListener('click', returnToIndex);
