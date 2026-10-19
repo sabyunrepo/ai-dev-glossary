@@ -65,6 +65,14 @@ details[open] > summary .disclosure-mark::before { content: "−"; }
 .slide .emoji { display: block; margin: 0 auto 28px; font-size: clamp(76px, 14vw, 104px); line-height: 1.2; }
 .slide h2 { margin: 10px 0 12px; font-size: clamp(38px, 7vw, 64px); line-height: 1.2; letter-spacing: -.05em; }
 .slide .aliases { font-size: 16px; }
+.has-illustration .term-heading { text-align: left; }
+.has-illustration .term-heading .emoji { display: none; }
+.has-illustration h2 { font-size: clamp(32px, 6vw, 48px); }
+.term-illustration { margin: 28px 0 0; }
+.term-illustration a { display: block; border-radius: 20px; overflow: hidden; background: #fffdf5; }
+.term-illustration a:focus-visible { outline: 3px solid #73a860; outline-offset: 4px; }
+.term-illustration img { display: block; width: 100%; height: auto; }
+.term-illustration figcaption { margin-top: 12px; text-align: center; font-size: 14px; color: var(--muted); }
 .slide .short { margin: 32px auto 0; max-width: 620px; font-size: clamp(23px, 3.5vw, 28px); line-height: 1.65; font-weight: 750; text-align: center; }
 .reading-block { margin-top: 36px; padding: 28px; border-radius: 22px; background: #eff5e7; }
 .reading-block h3 { display: flex; align-items: center; gap: 12px; margin: 0 0 18px; color: #46623e; font-size: 17px; font-weight: 750; }
@@ -125,6 +133,8 @@ details[open] > summary .disclosure-mark::before { content: "−"; }
   .slide { padding: 30px 22px; border-radius: 26px; }
   .slide .emoji { margin-bottom: 24px; }
   .slide .short { margin-top: 28px; }
+  .term-illustration { margin: 24px -14px 0; }
+  .term-illustration a { border-radius: 14px; }
   .reading-block { margin-top: 32px; padding: 24px 20px; border-radius: 18px; }
   .reading-block p { font-size: 20px; }
   .format-example > summary { padding: 20px 16px; gap: 12px; }

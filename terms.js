@@ -17,7 +17,13 @@ window.GLOSSARY_TERMS = [
       "t05"
     ],
     "emoji": "🤖",
-    "analogyEmoji": "🧰"
+    "analogyEmoji": "🧰",
+    "illustration": {
+      "src": "assets/illustrations/t01.webp",
+      "alt": "열린 공구함 안에 사진 분류용 돋보기, 글쓰기 연필, 말풍선 도구가 각각 담겨 있다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t02",
@@ -35,7 +41,13 @@ window.GLOSSARY_TERMS = [
       "t03"
     ],
     "emoji": "🧠",
-    "analogyEmoji": "🍎"
+    "analogyEmoji": "🍎",
+    "illustration": {
+      "src": "assets/illustrations/t02.webp",
+      "alt": "여러 사과와 오렌지 예시가 구분 기계를 거쳐 새 과일의 분류 결과로 이어진다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t03",
@@ -53,7 +65,13 @@ window.GLOSSARY_TERMS = [
       "t02"
     ],
     "emoji": "🧠",
-    "analogyEmoji": "🧩"
+    "analogyEmoji": "🧩",
+    "illustration": {
+      "src": "assets/illustrations/t03.webp",
+      "alt": "소리 파형이 여러 겹의 계산 층을 지나 글자 결과로 바뀐다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t04",
@@ -72,7 +90,13 @@ window.GLOSSARY_TERMS = [
       "t06"
     ],
     "emoji": "⚙️",
-    "analogyEmoji": "🍎"
+    "analogyEmoji": "🍎",
+    "illustration": {
+      "src": "assets/illustrations/t04.webp",
+      "alt": "과일 선별기가 예시로 배운 기준을 바탕으로 새 과일을 여러 분류함에 나눈다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t05",
@@ -94,7 +118,13 @@ window.GLOSSARY_TERMS = [
       "t01"
     ],
     "emoji": "💬",
-    "analogyEmoji": "⌨️"
+    "analogyEmoji": "⌨️",
+    "illustration": {
+      "src": "assets/illustrations/t05.webp",
+      "alt": "휴대전화 키보드에 문장을 입력하자 다음 표현 후보가 추천되고 새 글 만들기로 이어진다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t06",
@@ -112,7 +142,13 @@ window.GLOSSARY_TERMS = [
       "t10"
     ],
     "emoji": "⚠️",
-    "analogyEmoji": "📝"
+    "analogyEmoji": "📝",
+    "illustration": {
+      "src": "assets/illustrations/t06.webp",
+      "alt": "그럴듯한 답변 카드의 출처 칸에 원문이 없다는 표시가 있고 돋보기로 확인한다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t07",
@@ -131,7 +167,13 @@ window.GLOSSARY_TERMS = [
       "t05"
     ],
     "emoji": "🧩",
-    "analogyEmoji": "🧱"
+    "analogyEmoji": "🧱",
+    "illustration": {
+      "src": "assets/illustrations/t07.webp",
+      "alt": "설명용 그림으로 표시된 문장이 단어 경계를 넘고 단어 안에서도 나뉘며 마침표도 조각으로 보인다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t08",
@@ -151,7 +193,13 @@ window.GLOSSARY_TERMS = [
       "t05"
     ],
     "emoji": "📂",
-    "analogyEmoji": "🗒️"
+    "analogyEmoji": "🗒️",
+    "illustration": {
+      "src": "assets/illustrations/t08.webp",
+      "alt": "상담 담당자에게 이번 질문과 함께 전달된 과거 상담 기록이 답변 참고 자료로 모인다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t09",
@@ -169,7 +217,13 @@ window.GLOSSARY_TERMS = [
       "t08"
     ],
     "emoji": "🪟",
-    "analogyEmoji": "🪑"
+    "analogyEmoji": "🪑",
+    "illustration": {
+      "src": "assets/illustrations/t09.webp",
+      "alt": "책상 위 질문·자료와 답변이 공간을 나눠 쓰며 긴 자료는 나누어 정리한다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t10",
@@ -190,7 +244,13 @@ window.GLOSSARY_TERMS = [
       "t14"
     ],
     "emoji": "💬",
-    "analogyEmoji": "📝"
+    "analogyEmoji": "📝",
+    "illustration": {
+      "src": "assets/illustrations/t10.webp",
+      "alt": "요청서의 할 일, 참고 자료, 원하는 결과 칸을 작성해 결과 카드로 이어진다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t11",
@@ -208,7 +268,13 @@ window.GLOSSARY_TERMS = [
       "t12"
     ],
     "emoji": "0️⃣",
-    "analogyEmoji": "🗣️"
+    "analogyEmoji": "🗣️",
+    "illustration": {
+      "src": "assets/illustrations/t11.webp",
+      "alt": "예시가 비어 있는 상태로 번역 요청이 중립적인 컴퓨터 화면을 거쳐 답으로 이어진다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t12",
@@ -242,6 +308,12 @@ window.GLOSSARY_TERMS = [
           "text": "AI가 이 빈자리를 채워 답하게 해요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t12.webp",
+      "alt": "두 개의 고객 의견과 분류 예시를 보여준 뒤 새 의견을 비슷한 형식으로 분류한다.",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -260,7 +332,13 @@ window.GLOSSARY_TERMS = [
       "t14"
     ],
     "emoji": "👓",
-    "analogyEmoji": "👓"
+    "analogyEmoji": "👓",
+    "illustration": {
+      "src": "assets/illustrations/t13.webp",
+      "alt": "같은 안내문을 처음 온 고객과 교정 담당자의 돋보기로 각각 살펴본다.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t14",
@@ -299,6 +377,12 @@ window.GLOSSARY_TERMS = [
           "text": "결과를 어떻게 보여줄지 정해요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t14.webp",
+      "alt": "택배 신청서에서 받는 사람·주소·물건을 나누어 쓰듯, AI 요청도 할 일·참고 자료·답변 형식으로 나누어 적어요.",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -324,7 +408,13 @@ window.GLOSSARY_TERMS = [
       "code": "<!-- h1 태그는 큰 제목이에요 -->\n<h1>용어 사전</h1>\n\n<!-- p 태그는 문단이에요 -->\n<p>낯선 말을 쉽게 풀어봐요.</p>",
       "note": "HTML은 꺾쇠괄호로 표시를 감싸서 제목이나 문단 같은 역할을 알려줘요."
     },
-    "analogyEmoji": "📑"
+    "analogyEmoji": "📑",
+    "illustration": {
+      "src": "assets/illustrations/t15.webp",
+      "alt": "요리책의 재료·순서·주의 표시가 글의 각 부분을 나눠요. 마크업 언어로 문서의 역할과 구성을 표시하는 비유예요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t16",
@@ -364,7 +454,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "📓"
+    "analogyEmoji": "📓",
+    "illustration": {
+      "src": "assets/illustrations/t16.webp",
+      "alt": "제목 앞의 #, 목록 앞의 -, 강조할 말 양쪽의 **가 읽기 화면에서 제목·목록·굵은 글씨로 보여요. Markdown의 작성 규칙을 보여줘요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t17",
@@ -402,7 +498,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "🗒️"
+    "analogyEmoji": "🗒️",
+    "illustration": {
+      "src": "assets/illustrations/t17.webp",
+      "alt": "Markdown 기호로 쓴 글을 README.md라는 이름의 파일에 담아 저장해요. 작성 규칙과 글을 담은 파일을 구별하는 그림이에요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t18",
@@ -420,7 +522,13 @@ window.GLOSSARY_TERMS = [
       "t19"
     ],
     "emoji": "📎",
-    "analogyEmoji": "🏷️"
+    "analogyEmoji": "🏷️",
+    "illustration": {
+      "src": "assets/illustrations/t18.webp",
+      "alt": "같은 풍경 사진이 .png와 .jpg라는 서로 다른 파일 이름표를 달고 있으며, 내용은 그대로라고 보여주는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t19",
@@ -459,7 +567,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "🚪"
+    "analogyEmoji": "🚪",
+    "illustration": {
+      "src": "assets/illustrations/t19.webp",
+      "alt": "사람이 다가오면 감지하고 문을 여는 자동문의 동작 규칙을 보여주는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t20",
@@ -508,7 +622,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "📋"
+    "analogyEmoji": "📋",
+    "illustration": {
+      "src": "assets/illustrations/t20.webp",
+      "alt": "이름, 도시, 관심 항목을 민지, 부산, 산책 값과 짝지은 신청서와, 큰따옴표와 쉼표를 갖춘 JSON 카드.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t21",
@@ -547,7 +667,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "📖"
+    "analogyEmoji": "📖",
+    "illustration": {
+      "src": "assets/illustrations/t21.webp",
+      "alt": "여행 안내 책에서 제목, 본문, 다음 페이지 링크가 각기 다른 위치에 있는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t22",
@@ -583,7 +709,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "🛋️"
+    "analogyEmoji": "🛋️",
+    "illustration": {
+      "src": "assets/illustrations/t22.webp",
+      "alt": "꾸밈 규칙을 적용하기 전의 방과 색·크기·간격을 정리한 뒤의 방을 비교하는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t23",
@@ -623,7 +755,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "🔔"
+    "analogyEmoji": "🔔",
+    "illustration": {
+      "src": "assets/illustrations/t23.webp",
+      "alt": "웹페이지 버튼을 누르면 인사말이 나타나고, 초인종을 누르면 종이 울리는 두 장면을 보여주는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t24",
@@ -643,7 +781,13 @@ window.GLOSSARY_TERMS = [
       "t48"
     ],
     "emoji": "📰",
-    "analogyEmoji": "📖"
+    "analogyEmoji": "📖",
+    "illustration": {
+      "src": "assets/illustrations/t24.webp",
+      "alt": "미리 준비한 여행 안내 페이지를 웹사이트에서 보여주고, 메뉴 버튼을 눌러 위치 페이지로 이동하는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t25",
@@ -662,7 +806,13 @@ window.GLOSSARY_TERMS = [
       "t29"
     ],
     "emoji": "📱",
-    "analogyEmoji": "🙋"
+    "analogyEmoji": "🙋",
+    "illustration": {
+      "src": "assets/illustrations/t25.webp",
+      "alt": "식당 손님이 주문하고 휴대전화 앱이 가까운 식당을 요청하는 장면을 나란히 보여주는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t26",
@@ -682,7 +832,13 @@ window.GLOSSARY_TERMS = [
       "t30"
     ],
     "emoji": "🖥️",
-    "analogyEmoji": "🍽️"
+    "analogyEmoji": "🍽️",
+    "illustration": {
+      "src": "assets/illustrations/t26.webp",
+      "alt": "식당에서 주문을 받고 음식을 준비해 내는 과정과, 컴퓨터가 요청을 받아 처리해 결과를 돌려주는 과정을 나란히 보여주는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t27",
@@ -703,7 +859,13 @@ window.GLOSSARY_TERMS = [
       "t23"
     ],
     "emoji": "🖥️",
-    "analogyEmoji": "📋"
+    "analogyEmoji": "📋",
+    "illustration": {
+      "src": "assets/illustrations/t27.webp",
+      "alt": "손님이 식당 메뉴를 보고 고르는 장면과 휴대전화에서 음식 메뉴를 누르는 화면을 보여주는 그림.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t28",
@@ -723,7 +885,13 @@ window.GLOSSARY_TERMS = [
       "t30"
     ],
     "emoji": "⚙️",
-    "analogyEmoji": "👨‍🍳"
+    "analogyEmoji": "👨‍🍳",
+    "illustration": {
+      "src": "assets/illustrations/t28.webp",
+      "alt": "손님이 주문 화면에서 김밥을 주문하면 주방에서 준비하고 결과가 돌아오는 식당 단면도.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t29",
@@ -759,6 +927,12 @@ window.GLOSSARY_TERMS = [
           "text": "그 지역의 기온을 숫자로 담았어요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t29.webp",
+      "alt": "손님이 정해진 주문서를 보내고 주방에서 음식을 받는 모습이에요. API는 다른 프로그램에 요청하고 답을 받는 약속에 빗댄 그림이에요.",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -800,6 +974,12 @@ window.GLOSSARY_TERMS = [
           "text": "이름이 토큰인 것만 골라요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t30.webp",
+      "alt": "이름표가 붙은 서랍에 자료 카드를 정리해 넣고 필요한 카드를 꺼내요. 데이터베이스가 정보를 저장하고 찾는 역할을 보여줘요.",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -819,7 +999,13 @@ window.GLOSSARY_TERMS = [
       "t25"
     ],
     "emoji": "🪪",
-    "analogyEmoji": "🎟️"
+    "analogyEmoji": "🎟️",
+    "illustration": {
+      "src": "assets/illustrations/t31.webp",
+      "alt": "방문자가 출입증을 내면 안내 데스크가 등록 정보와 맞는지 확인해요. 서비스를 쓰는 사람이나 앱이 누구인지 확인하는 과정에 빗댄 그림이에요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t32",
@@ -838,7 +1024,13 @@ window.GLOSSARY_TERMS = [
       "t31"
     ],
     "emoji": "🔑",
-    "analogyEmoji": "🎫"
+    "analogyEmoji": "🎫",
+    "illustration": {
+      "src": "assets/illustrations/t32.webp",
+      "alt": "앱이 이용 코드를 서비스에 보내고, 서비스가 그 앱의 사용 기록을 구분해요. API 키로 요청한 앱이나 계정을 알아보는 예예요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t33",
@@ -876,7 +1068,13 @@ window.GLOSSARY_TERMS = [
         }
       ]
     },
-    "analogyEmoji": "🛵"
+    "analogyEmoji": "🛵",
+    "illustration": {
+      "src": "assets/illustrations/t33.webp",
+      "alt": "같은 앱에 파란 집 주소 쪽지를 주면 연습 장소로, 주황 건물 주소 쪽지를 주면 실제 장소로 연결돼요. 앱은 그대로 두고 설정값을 바꾸는 예예요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t34",
@@ -899,7 +1097,13 @@ window.GLOSSARY_TERMS = [
         "label": "MCP 공식 소개",
         "url": "https://modelcontextprotocol.io/docs/getting-started/intro"
       }
-    ]
+    ],
+    "illustration": {
+      "src": "assets/illustrations/t34.webp",
+      "alt": "AI와 파일 찾기·계산 도구가 같은 모양의 연결부로 이어져요. MCP는 서로 다른 도구와 요청·결과를 주고받는 공통 약속에 빗댄 그림이에요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t35",
@@ -918,7 +1122,13 @@ window.GLOSSARY_TERMS = [
       "t29"
     ],
     "emoji": "🔗",
-    "analogyEmoji": "🌉"
+    "analogyEmoji": "🌉",
+    "illustration": {
+      "src": "assets/illustrations/t35.webp",
+      "alt": "AI 앱과 문서 서비스 사이에 놓인 다리를 따라 자료가 전달돼요. 커넥터가 다른 서비스의 자료나 기능을 쓰도록 이어주는 역할을 보여줘요.",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t36",
@@ -957,6 +1167,12 @@ window.GLOSSARY_TERMS = [
           "text": "AI가 참고할 작업 순서예요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t36.webp",
+      "alt": "요리 레시피의 준비·순서·완성 단계를 AI가 작업 안내로 따라 하는 모습",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -976,7 +1192,13 @@ window.GLOSSARY_TERMS = [
       "t34"
     ],
     "emoji": "🧰",
-    "analogyEmoji": "🏪"
+    "analogyEmoji": "🏪",
+    "illustration": {
+      "src": "assets/illustrations/t37.webp",
+      "alt": "도구·연결 케이블·작업 안내 책이 든 추가 묶음이 작은 가게에 기능을 더하는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t38",
@@ -1020,7 +1242,13 @@ window.GLOSSARY_TERMS = [
         "label": "Claude Code 공식 안내",
         "url": "https://code.claude.com/docs/en/memory"
       }
-    ]
+    ],
+    "illustration": {
+      "src": "assets/illustrations/t38.webp",
+      "alt": "팀 소개와 지킬 약속이 적힌 안내문을 새 직원처럼 앱이 확인하는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t39",
@@ -1040,7 +1268,13 @@ window.GLOSSARY_TERMS = [
       "t41"
     ],
     "emoji": "⏰",
-    "analogyEmoji": "📅"
+    "analogyEmoji": "📅",
+    "illustration": {
+      "src": "assets/illustrations/t39.webp",
+      "alt": "매주 월요일 달력과 예약 알람이 업무 요약 작업으로 이어지는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t40",
@@ -1058,7 +1292,13 @@ window.GLOSSARY_TERMS = [
       "t37"
     ],
     "emoji": "🖱️",
-    "analogyEmoji": "🧑‍💻"
+    "analogyEmoji": "🧑‍💻",
+    "illustration": {
+      "src": "assets/illustrations/t40.webp",
+      "alt": "AI가 화면을 보고 마우스를 클릭하고 키보드로 글을 입력하는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t41",
@@ -1084,7 +1324,13 @@ window.GLOSSARY_TERMS = [
         "label": "Claude 공식 안내",
         "url": "https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork"
       }
-    ]
+    ],
+    "illustration": {
+      "src": "assets/illustrations/t41.webp",
+      "alt": "외출 중 휴대폰으로 보낸 요약 부탁이 켜진 컴퓨터의 Claude와 보고서 요약으로 이어지는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t42",
@@ -1127,6 +1373,12 @@ window.GLOSSARY_TERMS = [
           "text": "어떤 상태가 되면 완성인지 정해요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t42.webp",
+      "alt": "누가 쓸지·무엇이 필요할지·어떤 기능을 만들지 적은 기획 문서가 가게 모델로 이어지는 모습",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -1143,7 +1395,13 @@ window.GLOSSARY_TERMS = [
       "t44"
     ],
     "emoji": "🧪",
-    "analogyEmoji": "🍽️"
+    "analogyEmoji": "🍽️",
+    "illustration": {
+      "src": "assets/illustrations/t43.webp",
+      "alt": "메뉴 두 가지로 손님에게 먼저 제공하고 반응을 기록하는 식당",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t44",
@@ -1175,6 +1433,12 @@ window.GLOSSARY_TERMS = [
           "text": "수정 전후에 달라진 부분을 보여줘요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t44.webp",
+      "alt": "문서의 처음 모습과 수정 내역을 변경 장부에 기록하고 예전 모습을 찾아보는 그림",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -1213,6 +1477,12 @@ window.GLOSSARY_TERMS = [
           "text": "왜 바꿨는지 짧은 설명을 붙여요."
         }
       ]
+    },
+    "illustration": {
+      "src": "assets/illustrations/t45.webp",
+      "alt": "고른 변경 문서를 메모와 함께 한 묶음으로 변경 기록에 남기는 그림",
+      "width": 1086,
+      "height": 1448
     }
   },
   {
@@ -1230,7 +1500,13 @@ window.GLOSSARY_TERMS = [
       "t47"
     ],
     "emoji": "☁️",
-    "analogyEmoji": "🗃️"
+    "analogyEmoji": "🗃️",
+    "illustration": {
+      "src": "assets/illustrations/t46.webp",
+      "alt": "파일과 변경 기록이 든 온라인 공동 서류함에 여러 사람이 연결해 함께 작업하는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t47",
@@ -1250,7 +1526,13 @@ window.GLOSSARY_TERMS = [
       "t52"
     ],
     "emoji": "🚀",
-    "analogyEmoji": "🏪"
+    "analogyEmoji": "🏪",
+    "illustration": {
+      "src": "assets/illustrations/t47.webp",
+      "alt": "준비된 가게가 컴퓨터 화면 속에서 문을 열고 사람들이 이용하기 시작하는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t48",
@@ -1269,7 +1551,13 @@ window.GLOSSARY_TERMS = [
       "t24"
     ],
     "emoji": "🏠",
-    "analogyEmoji": "🏢"
+    "analogyEmoji": "🏢",
+    "illustration": {
+      "src": "assets/illustrations/t48.webp",
+      "alt": "웹사이트가 놓일 자리와 기본 시설·방문자 연결을 제공하는 가게 터",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t49",
@@ -1292,7 +1580,13 @@ window.GLOSSARY_TERMS = [
         "label": "Supabase 공식 문서",
         "url": "https://supabase.com/docs"
       }
-    ]
+    ],
+    "illustration": {
+      "src": "assets/illustrations/t49.webp",
+      "alt": "앱이 정보 보관 창고와 로그인 확인 창구 기능을 빌려 쓰는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t50",
@@ -1315,7 +1609,13 @@ window.GLOSSARY_TERMS = [
         "label": "Vercel 공식 배포 안내",
         "url": "https://vercel.com/docs/deployments"
       }
-    ]
+    ],
+    "illustration": {
+      "src": "assets/illustrations/t50.webp",
+      "alt": "웹사이트 작품을 전시 공간에 걸어 방문자가 볼 수 있도록 돕는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t51",
@@ -1333,7 +1633,13 @@ window.GLOSSARY_TERMS = [
       "t47"
     ],
     "emoji": "⚠️",
-    "analogyEmoji": "🚪"
+    "analogyEmoji": "🚪",
+    "illustration": {
+      "src": "assets/illustrations/t51.webp",
+      "alt": "사람이 다가갔지만 열리지 않는 자동문과 열려야 하는 기대 모습의 비교",
+      "width": 1086,
+      "height": 1448
+    }
   },
   {
     "id": "t52",
@@ -1351,6 +1657,12 @@ window.GLOSSARY_TERMS = [
       "t47"
     ],
     "emoji": "🛠️",
-    "analogyEmoji": "🔧"
+    "analogyEmoji": "🔧",
+    "illustration": {
+      "src": "assets/illustrations/t52.webp",
+      "alt": "열린 가게의 조명을 점검하고 문을 수리하고 경사로를 더하며 계속 돌보는 모습",
+      "width": 1086,
+      "height": 1448
+    }
   }
 ];

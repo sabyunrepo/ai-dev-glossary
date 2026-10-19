@@ -6,7 +6,7 @@
   <meta name="description" content="AI와 개발 용어를 쉬운 말, 생활 속 비유, 실제 예로 찾아보는 용어집">
   <meta name="theme-color" content="#f7f7f0">
   <title>AI·개발 용어 한입 사전</title>
-  <link rel="stylesheet" href="styles.css?v=all-terms-20261019">
+  <link rel="stylesheet" href="styles.css?v=illustrations-20261019">
 </head>
 <body>
   <main class="shell">
@@ -27,7 +27,7 @@
     </section>
 
     <section id="indexView" aria-label="용어 목록">
-      <div class="list-head"><span id="resultCount" aria-live="polite"></span><span>눌러서 비유와 예시를 읽어보세요.</span></div>
+      <div class="list-head"><span id="resultCount" aria-live="polite"></span><span>눌러서 그림과 예시를 살펴보세요.</span></div>
       <div class="grid" id="grid"></div>
     </section>
 
@@ -38,7 +38,7 @@
       <div class="slide-controls"><button type="button" id="prevSlide">← 이전</button><span class="slide-count" id="slideCount" aria-live="polite">0 / 0</span><button type="button" id="nextSlide">다음 →</button></div>
     </section>
   </main>
-  <script src="terms.js?v=mobile-review-20261019"></script>
+  <script src="terms.js?v=illustrations-20261019"></script>
   <script>
     (() => {
       const terms = window.GLOSSARY_TERMS || [];
@@ -58,7 +58,7 @@
       const grid = $('#grid');
       const byId = new Map(terms.map(term => [term.id, term]));
       const escapeHTML = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-      const searchableText = term => [term.term, ...(term.aliases || []), term.category, term.short, term.analogy, term.example, term.note, term.formatExample?.label, term.formatExample?.language, term.formatExample?.code].filter(Boolean).join(' ').toLocaleLowerCase('ko');
+      const searchableText = term => [term.term, ...(term.aliases || []), term.category, term.short, term.analogy, term.example, term.note, term.illustration?.alt, term.formatExample?.label, term.formatExample?.language, term.formatExample?.code].filter(Boolean).join(' ').toLocaleLowerCase('ko');
 
       function matches() {
         const needle = query.toLocaleLowerCase('ko');
@@ -91,6 +91,12 @@
         return `<details class="format-example"><summary><span class="format-symbol" aria-hidden="true">🧾</span><span class="format-title"><strong>실제 작성 모습</strong><small>${escapeHTML(example.language)} · ${escapeHTML(example.label)}</small></span><span class="disclosure-mark" aria-hidden="true"></span></summary>${code}</details>`;
       }
 
+      function illustration(term) {
+        const picture = term.illustration;
+        if (!picture || !/^assets\/illustrations\/t\d+\.webp$/.test(picture.src)) return '';
+        return `<figure class="term-illustration"><a href="${escapeHTML(picture.src)}" target="_blank" rel="noopener" title="원본 그림 크게 보기 (새 탭)"><img src="${escapeHTML(picture.src)}" alt="${escapeHTML(picture.alt)}" width="${picture.width}" height="${picture.height}" loading="lazy" decoding="async"><span class="sr-only">원본 그림 크게 보기 (새 탭)</span></a><figcaption>그림을 누르면 크게 볼 수 있어요 ↗</figcaption></figure>`;
+      }
+
       function card(term) {
         return `<article class="term-card" id="card-${term.id}">
           <span class="card-emoji" aria-hidden="true">${escapeHTML(term.emoji || '🧩')}</span>
@@ -98,7 +104,7 @@
           <h2><button class="open-term" type="button" data-open-term="${term.id}">${escapeHTML(term.term)}</button></h2>
           ${aliasesLine(term)}
           <p class="short">${escapeHTML(term.short)}</p>
-          <button class="read-more" type="button" data-open-term="${term.id}" aria-label="${escapeHTML(term.term)} 비유와 예시 읽기">비유와 예시 읽기 →</button>
+          <button class="read-more" type="button" data-open-term="${term.id}" aria-label="${escapeHTML(term.term)} 그림과 예시 보기">그림과 예시 보기 →</button>
         </article>`;
       }
 
@@ -132,6 +138,7 @@
       function renderSlide() {
         const term = visible[slideIndex];
         const card = $('#slideCard');
+        card.classList.toggle('has-illustration', Boolean(term?.illustration));
         updatePathContext();
         if (!term) {
           card.innerHTML = '<p class="empty">표시할 용어가 없어요. 검색어나 분야를 바꿔보세요.</p>';
@@ -144,6 +151,7 @@
           <span class="category">${escapeHTML(term.category)}</span>
           <h2>${escapeHTML(term.term)}</h2>
           ${aliasesLine(term)}</header>
+          ${illustration(term)}
           <p class="short">${escapeHTML(term.short)}</p>
           <section class="reading-block"><h3><span class="block-emoji" aria-hidden="true">${escapeHTML(term.analogyEmoji || '💭')}</span>비유하면</h3><p>${escapeHTML(term.analogy)}</p></section>
           <section class="reading-block example-block"><h3><span class="block-emoji" aria-hidden="true">📍</span>이럴 때 써요</h3><p>${escapeHTML(term.example)}</p></section>

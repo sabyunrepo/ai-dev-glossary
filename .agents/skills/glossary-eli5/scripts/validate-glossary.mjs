@@ -1,5 +1,5 @@
-import { readFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
+import { readFile, access } from 'node:fs/promises';
+import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 
@@ -32,6 +32,22 @@ try {
     if (term.sources !== undefined && (!Array.isArray(term.sources) || term.sources.some(source => typeof source.label !== 'string' || !source.label.trim() || typeof source.url !== 'string' || !/^https:\/\//.test(source.url)))) {
       errors.push(`${label}: 출처에는 이름과 https 주소가 필요해요.`);
     }
+    if (term.illustration !== undefined) {
+      const picture = term.illustration;
+      if (!picture || typeof picture !== 'object') {
+        errors.push(`${label}: 그림 정보가 올바르지 않아요.`);
+      } else {
+        if (typeof picture.alt !== 'string' || !picture.alt.trim()) errors.push(`${label}: 그림의 쉬운 대체 설명이 필요해요.`);
+        if (!Number.isInteger(picture.width) || picture.width <= 0 || !Number.isInteger(picture.height) || picture.height <= 0) errors.push(`${label}: 그림의 실제 가로·세로 크기가 필요해요.`);
+        if (typeof picture.src !== 'string' || !/^assets\/illustrations\/t\d+\.webp$/.test(picture.src)) {
+          errors.push(`${label}: 그림은 assets/illustrations 안의 WebP 파일이어야 해요.`);
+        } else {
+          if (picture.src !== `assets/illustrations/${term.id}.webp`) errors.push(`${label}: 그림 파일 이름이 용어 ID와 달라요.`);
+          try { await access(resolve(dirname(input), picture.src)); }
+          catch { errors.push(`${label}: 그림 파일 ${picture.src}가 없어요.`); }
+        }
+      }
+    }
     const sample = term.formatExample;
     if (!sample) continue;
     for (const field of ['label', 'language', 'code', 'note']) {
@@ -58,7 +74,7 @@ try {
     for (const error of errors) console.error(`오류: ${error}`);
     process.exitCode = 1;
   } else {
-    console.log(`${terms.length}개 용어 확인 완료 · 파일 예시 ${terms.filter(term => term.formatExample).length}개 · 관련 링크 정상`);
+    console.log(`${terms.length}개 용어 확인 완료 · 설명 그림 ${terms.filter(term => term.illustration).length}개 · 파일 예시 ${terms.filter(term => term.formatExample).length}개 · 관련 링크 정상`);
   }
 } catch (error) {
   console.error(`오류: ${error.message}`);

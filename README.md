@@ -11,6 +11,7 @@ https://sabyunrepo.github.io/ai-dev-glossary/
 - `index.html`: 용어집 화면과 인터랙션
 - `styles.css`: 모바일·태블릿·데스크톱 화면에 맞춘 글자와 배치
 - `terms.js`: 용어 설명, 예시, 관련 용어 연결
+- `assets/illustrations/`: 용어별 설명 그림(WebP). 읽기 화면에서만 불러옵니다.
 - `.nojekyll`: GitHub Pages가 파일을 별도 변환하지 않고 제공하도록 하는 표시 파일
 
 ## 용어 추가·수정
@@ -22,5 +23,7 @@ https://sabyunrepo.github.io/ai-dev-glossary/
 ```sh
 node .agents/skills/glossary-eli5/scripts/validate-glossary.mjs
 ```
+
+설명 그림은 용어 데이터의 `illustration`에 `src`, 쉬운 대체 설명인 `alt`, 실제 `width`·`height`를 넣어 연결합니다. 그림을 누르면 크게 볼 수 있습니다. 생성 원본과 프롬프트는 로컬 `output/imagegen/`에 보관합니다.
 
 GitHub Pages로 공개되는 사이트이므로 이 저장소와 사이트의 내용은 누구나 볼 수 있습니다.
